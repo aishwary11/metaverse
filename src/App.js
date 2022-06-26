@@ -56,13 +56,9 @@ function App() {
       setBuildings(buildings);
 
       // Event listeners...
-      window.ethereum.on("accountsChanged", function (accounts) {
-        setAccount(accounts[0]);
-      });
+      window.ethereum.on("accountsChanged", (accounts) => setAccount(accounts[0]));
 
-      window.ethereum.on("chainChanged", (chainId) => {
-        window.location.reload();
-      });
+      window.ethereum.on("chainChanged", () => window.location.reload());
     }
   };
 
@@ -82,13 +78,9 @@ function App() {
 
   const buyHandler = async (_id) => {
     try {
-      await landContract.methods
-        .mint(_id)
-        .send({ from: account, value: "1000000000000000000" });
-
+      await landContract.methods.mint(_id).send({ from: account, value: "1000000000000000000" });
       const buildings = await landContract.methods.getBuildings().call();
       setBuildings(buildings);
-
       setLandName(buildings[_id - 1].name);
       setLandOwner(buildings[_id - 1].owner);
       setHasOwner(true);
